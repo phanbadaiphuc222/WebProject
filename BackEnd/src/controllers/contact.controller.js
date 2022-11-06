@@ -5,6 +5,26 @@ exports.create = (req, res) => {
     return res.send({ message: 'create handler'});
 };
 
+exports.findAllUser = async (req, res, next) => {
+    let accounts = [];
+    try {
+        const accountService = new ContactService();
+        const {email} = req.query;
+        if (email) {
+            accounts = await accountService.findByEmail(email);
+        } else {
+            contacts = await accountService.all();
+        }
+    } catch (error) {
+        console.log(error);
+        return next(
+            new ApiError(500, 'An error occurred while retrieving contacts')
+        );
+    }
+
+    return res.send(contacts);
+};
+
 exports.findAll = async (req, res, next) => {
     let contacts = [];
     try {

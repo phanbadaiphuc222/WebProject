@@ -18,6 +18,21 @@ class ContactService {
         });
         return contact;
     }
+
+    #register(payload) {
+        const account = {...payload};
+        const accountProperties = [
+            "email", "password"
+        ];
+
+        Object.keys(account).forEach(function(key) {
+            if (accountProperties.indexOf(key) == -1) {
+                delete account[key];
+            }
+        });
+        return account;
+    }
+
     async create(payload) {
         const contact = this.#getContact(payload);
         const [id] = await this.contacts.insert(contact);
@@ -54,6 +69,17 @@ class ContactService {
     async deleteAll() {
         return await this.contacts.del();
     }
+
+    async findByEmail(email) {
+        return await this.accounts
+            .where('email', 'like', `%${email}%`)
+            .select('*');
+    }
+
+    async findByPassword(password) {
+        return await this.accounts.where('password', password).select('*').first();
+    }
+
 }
 
 module.exports = ContactService;
