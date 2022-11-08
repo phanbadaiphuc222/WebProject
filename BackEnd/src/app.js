@@ -24,6 +24,16 @@ app.route('/api/login')
 app.route('/api/student')
     .get(studentController.findAllStudent);
 
+app.route('/api/student/:id')
+    .get(studentController.findStudentById)
+    .delete(studentController.delete);
+
+app.route('/api/student/add')
+    .post(studentController.createStudent)
+
+// app.route('/api/student/add/:id')
+//     .delete(studentController.delete);
+
 app.route('/api/register/:email')    
     .get(accountController.findAllUser);
 
@@ -35,11 +45,6 @@ app.route('/api/contacts')
 app.route('/api/contacts/favorite').get(contactController.findAllFavorite);
 
 app.route('/api/contatcs/:id')
-    .get(contactController.findOne)
-    .put(contactController.update)
-    .delete(contactController.delete);
-
-app.route('/api/contacts/:id')
     .get(contactController.findOne)
     .put(contactController.update)
     .delete(contactController.delete);

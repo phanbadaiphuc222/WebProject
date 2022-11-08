@@ -3,28 +3,28 @@ const knex = require('../database/knex');
 class StudentService {
 
     constructor() {
-        this.accounts = knex('students');
+        this.students = knex('students');
     }
 
-    // #register(payload) {
-    //     const account = {...payload};
-    //     const accountProperties = [
-    //         "email", "password"
-    //     ];
+    #register(payload) {
+        const student = {...payload};
+        const studentProperties = [
+            "name", "id", "hometown", "grade", "className", "class_id"
+        ];
 
-    //     Object.keys(account).forEach(function(key) {
-    //         if (accountProperties.indexOf(key) == -1) {
-    //             delete account[key];
-    //         }
-    //     });
-    //     return account;
+        Object.keys(student).forEach(function(key) {
+            if (studentProperties.indexOf(key) == -1) {
+                delete student[key];
+            }
+        });
+        return student;
+    }
+
+    // async findByName(name) {
+    //     return await this.accounts
+    //         .where('name', 'like', `%${name}%`)
+    //         .select('*');
     // }
-
-    async findByName(name) {
-        return await this.accounts
-            .where('name', 'like', `%${name}%`)
-            .select('*');
-    }
 
     // async findByPassword(password) {
     //     return await this.accounts
@@ -40,14 +40,22 @@ class StudentService {
     // }
 
     async all () {
-        return await this.accounts.select('*');
+        return await this.students.select('*');
     }
 
-    // async create(payload) {
-    //     const account = this.#register(payload);
-    //     await this.accounts.insert(account);
-    //     return {...account};
-    // }
+    async createStudent(payload) {
+        const student = this.#register(payload);
+        await this.students.insert(student);
+        return {...student};
+    }
+
+    async delete(id) {
+        return await this.students.where('id', id).del();
+    }
+
+    async findStudentById(id ) {
+        return await this.students.where('id', id).select('*').first();
+    }
 }
 
 module.exports = StudentService;
